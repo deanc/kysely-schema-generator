@@ -1,0 +1,36 @@
+{
+  "name": "kysely-schema-generator",
+  "author": {
+    "name": "Dean Clatworthy",
+    "url": "https://deanclatworthy.com"
+  },
+  "version": "0.0.1",
+  "description": "A schema generator for kysely",
+  "main": "./dist/index.js",
+  "scripts": {
+    "preinstall": "pnpm build",
+    "build": "tsc -p . --outDir ./dist"
+  },
+  "bin": {
+    "kysely-codgegen-mysql": "./dist/index.js"
+  },
+  "keywords": [],
+  "license": "AGPL-3.0-or-later",
+  "dependencies": {
+    "@tsconfig/recommended": "^1.0.3",
+    "@types/lodash": "^4.14.200",
+    "commander": "^11.1.0",
+    "connection-string": "^4.4.0",
+    "dotenv": "^16.3.1",
+    "knex": "^3.0.1",
+    "lodash": "^4.17.21",
+    "mysql2": "^3.6.2",
+    "node-sql-parser": "^4.11.0",
+    "pnpm": "^8.9.2",
+    "prettier": "^3.0.3"
+  },
+  "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^4.2.0",
+    "typescript": "^5.2.2"
+  }
+}
