@@ -34,3 +34,5 @@ kysely-schema-generator
 ```sh
 kysely-schema-generator -p /path/to/.env
 ```
+
+Note if command can't be found you might need to use your package manager to run it (e.g. `pnpm exec kysely-schema-generator`)
