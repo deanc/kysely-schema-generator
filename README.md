@@ -36,3 +36,12 @@ kysely-schema-generator -p /path/to/.env
 ```
 
 Note if command can't be found you might need to use your package manager to run it (e.g. `pnpm exec kysely-schema-generator`)
+
+# Todo
+
+(Contributions very welcome)
+
+- Ensure all MySQL field types are mapped correctly
+- Add support for other database engines (Postgres, SQLite at least)
+- Add test coverage
+- (Maybe) offer option to write to disk instead of relying on user to capture
