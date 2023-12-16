@@ -8,7 +8,7 @@
   "description": "A schema generator for kysely",
   "main": "./dist/index.js",
   "scripts": {
-    "preinstall": "pnpm build",
+    "preinstall": "npm run build",
     "build": "tsc -p . --outDir ./dist"
   },
   "bin": {
