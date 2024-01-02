@@ -20,7 +20,7 @@ async function run(args: object) {
   const dbName = process.env.DATABASE_URL.split("/").pop()
   const db = await getDBConnection(process.env.DATABASE_URL)
   const tables = await db
-    .select("table_name")
+    .select("table_name as table_name")
     .from("information_schema.tables")
     .where("table_schema", dbName)
 
