@@ -13,7 +13,7 @@
     "test": "jest"
   },
   "bin": {
-    "kysely-codgegen-mysql": "./dist/index.js"
+    "kysely-schema-generator": "./dist/index.js"
   },
   "keywords": [],
   "license": "AGPL-3.0-or-later",

@@ -40,7 +40,11 @@ const generateFields = (fields: any[]): string => {
     .map((field) => {
       const canBeNull = field.nullable?.type !== "not null"
       const dataTypes = [
-        columnTypeToType(field.definition.dataType, field.definition.expr),
+        columnTypeToType(
+          "mysql",
+          field.definition.dataType,
+          field.definition.expr,
+        ),
       ]
 
       if (canBeNull) {
