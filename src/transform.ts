@@ -74,7 +74,9 @@ export const generateDatabase = async (
   )
   databaseString.push("}")
 
-  const str = `${typesString}\n${databaseString.join("\n")}`
+  const str = `import { Generated, Insertable, Selectable, Updateable } from 'kysely'\n\n${typesString}\n${databaseString.join(
+    "\n",
+  )}`
   const formattedStr = await format(str, { semi: false, parser: "typescript" })
   return formattedStr
 }
