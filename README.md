@@ -35,7 +35,8 @@ kysely-schema-generator
 kysely-schema-generator -p /path/to/.env
 ```
 
-**Option 3 (Save types a file)**
+**Option 3 (Save types to a file)**
+
 Generated types are automatically saved, and an `interface DB` is exported for you to use. If you want to save types into a custom output file, you can do that as well.
 
 ```sh
