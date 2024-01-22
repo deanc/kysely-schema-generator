@@ -65,12 +65,12 @@ export const generateDatabase = async (
   const databaseString = [`\nexport interface DB {`]
   databaseString.push(
     ...tableAndTypes.map(
-      ({ table, tableTypeName }) => `${table}: ${tableTypeName}`,
+      ({ table, tableTypeName }) => `${table}: ${tableTypeName}Table`,
     ),
   )
   databaseString.push("}")
-
-  const str = `${typesString}\n${databaseString.join("\n")}`
+  const kysleyImports = `import { Generated, Insertable, Selectable, Updateable } from "kysely"`
+  const str = `${kysleyImports}\n\n${typesString}\n${databaseString.join("\n")}`
   const formattedStr = await format(str, { semi: false, parser: "typescript" })
   return formattedStr
 }

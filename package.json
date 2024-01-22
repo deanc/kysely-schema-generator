@@ -12,7 +12,7 @@
     "build": "tsc -p . --outDir ./dist"
   },
   "bin": {
-    "kysely-codgegen-mysql": "./dist/index.js"
+    "kysely-codegen-mysql": "./dist/index.js"
   },
   "keywords": [],
   "license": "AGPL-3.0-or-later",
@@ -23,6 +23,7 @@
     "connection-string": "^4.4.0",
     "dotenv": "^16.3.1",
     "knex": "^3.0.1",
+    "kysely": "^0.27.2",
     "lodash": "^4.17.21",
     "mysql2": "^3.6.2",
     "node-sql-parser": "^4.11.0",

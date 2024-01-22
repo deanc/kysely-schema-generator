@@ -1,17 +1,24 @@
+#!/usr/bin/env node
 import { program } from "commander"
 import { config } from "dotenv"
 
 import { getCreateTableStatement, getDBConnection } from "./src/db"
+import { writeFile } from "./src/file-writer"
 import { generateDatabase, generateTable } from "./src/transform"
 import { TableAndTypes } from "./src/types"
+import { IArgs } from "./src/types"
+
+export * from "./db"
 
 const envPath = `${process.cwd()}/.env`
-async function run(args: object) {
+async function run(args: IArgs) {
   if ("pathEnv" in args) {
     config({ path: `${args.pathEnv}/.env` })
   } else {
     config({ path: envPath })
   }
+
+  console.log({ args })
 
   if (!process.env.DATABASE_URL) {
     throw Error("No valid DATABASE_URL process.env found")
@@ -34,10 +41,15 @@ async function run(args: object) {
     .filter((val) => val) as TableAndTypes[] // removed undefined stuff
 
   const generatedString = await generateDatabase(final)
-  console.log(generatedString)
+
+  if (args.print) console.log(generatedString) // prints types to console if arg. provided
+  writeFile({ outFile: args.outFile, content: generatedString }) // writes generated types to disk
   db.destroy()
 }
 
-program.option("-p, --path-env <path>", "path to .env file")
+program
+  .option("-p, --path-env <path>", "path to .env file")
+  .option("-o, --out-file <path>", "path to file to save output")
+  .option("--print", "prints generated types to console")
 program.action(run)
 program.parse(process.argv)

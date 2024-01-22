@@ -3,3 +3,14 @@ export interface TableAndTypes {
   tableTypeName: string
   types: string
 }
+
+export interface IWriteFileParams {
+  outFile?: string
+  content: string
+}
+
+export interface IArgs {
+  pathEnv?: string
+  outFile?: string
+  print?: boolean
+}
