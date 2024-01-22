@@ -35,7 +35,20 @@ kysely-schema-generator
 kysely-schema-generator -p /path/to/.env
 ```
 
+**Option 3 (Save types a file)**
+Generated types are automatically saved, and an `interface DB` is exported for you to use. If you want to save types into a custom output file, you can do that as well.
+
+```sh
+kysely-schema-generator -p /path/to/.env -o ./db/db.d.ts
+```
+
 Note if command can't be found you might need to use your package manager to run it (e.g. `pnpm exec kysely-schema-generator`)
+
+To display help for commands, run:
+
+```sh
+kysely-schema-generator -h
+```
 
 # Todo
 
@@ -44,4 +57,3 @@ Note if command can't be found you might need to use your package manager to run
 - Ensure all MySQL field types are mapped correctly
 - Add support for other database engines (Postgres, SQLite at least)
 - Add test coverage
-- (Maybe) offer option to write to disk instead of relying on user to capture

@@ -18,8 +18,6 @@ async function run(args: IArgs) {
     config({ path: envPath })
   }
 
-  console.log({ args })
-
   if (!process.env.DATABASE_URL) {
     throw Error("No valid DATABASE_URL process.env found")
   }
@@ -42,8 +40,11 @@ async function run(args: IArgs) {
 
   const generatedString = await generateDatabase(final)
 
-  if (args.print) console.log(generatedString) // prints types to console if arg. provided
-  writeFile({ outFile: args.outFile, content: generatedString }) // writes generated types to disk
+  // prints types to console if arg. provided
+  if (args.print) console.log(generatedString)
+
+  // writes generated types to disk
+  writeFile({ outFile: args.outFile, content: generatedString })
   db.destroy()
 }
 
