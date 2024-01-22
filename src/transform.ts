@@ -40,7 +40,11 @@ const generateFields = (fields: any[]): string => {
     .map((field) => {
       const canBeNull = field.nullable?.type !== "not null"
       const dataTypes = [
-        columnTypeToType(field.definition.dataType, field.definition.expr),
+        columnTypeToType(
+          "mysql",
+          field.definition.dataType,
+          field.definition.expr,
+        ),
       ]
 
       if (canBeNull) {
@@ -69,8 +73,10 @@ export const generateDatabase = async (
     ),
   )
   databaseString.push("}")
-  const kysleyImports = `import { Generated, Insertable, Selectable, Updateable } from "kysely"`
-  const str = `${kysleyImports}\n\n${typesString}\n${databaseString.join("\n")}`
+
+  const str = `import { Generated, Insertable, Selectable, Updateable } from 'kysely'\n\n${typesString}\n${databaseString.join(
+    "\n",
+  )}`
   const formattedStr = await format(str, { semi: false, parser: "typescript" })
   return formattedStr
 }
