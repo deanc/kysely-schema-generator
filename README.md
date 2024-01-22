@@ -50,6 +50,29 @@ To display help for commands, run:
 kysely-schema-generator -h
 ```
 
+### Using the type definations
+
+```ts
+import { DB } from "@deanc/kysely-schema-generator"
+import { Kysely, MysqlDialect } from "kysely"
+import { createPool } from "mysql2"
+
+const dialect = new MysqlDialect({
+  pool: createPool({
+    database: "test",
+    host: "localhost",
+    user: "user",
+    password: "123",
+    port: 3306,
+    connectionLimit: 10,
+  }),
+})
+
+export const db = new Kysely<DB>({
+  dialect,
+})
+```
+
 # Todo
 
 (Contributions very welcome)
