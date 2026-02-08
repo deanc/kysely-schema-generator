@@ -19,8 +19,6 @@ export const getCreateTableStatement = async (
   db: Knex,
   tableName: string,
 ): Promise<string> => {
-  const createTable = await db.raw(
-    `SHOW CREATE TABLE ${tableName.replace(/[^\w]+/i, "")}`,
-  )
+  const createTable = await db.raw("SHOW CREATE TABLE ??", [tableName])
   return createTable[0][0]["Create Table"]
 }

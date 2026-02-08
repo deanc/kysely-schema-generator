@@ -1,15 +1,45 @@
 import { Parser } from "node-sql-parser"
-import type { AST } from "node-sql-parser"
+import type { AST, Create } from "node-sql-parser"
 import { format } from "prettier"
 
 import { columnTypeToType, isCreateStatement, pascalCase } from "./helpers"
 import { TableAndTypes } from "./types"
 
-export const generateTable = (sql: string): TableAndTypes | undefined => {
-  const parser = new Parser()
-  const ast = parser.astify(sql) as AST[]
+type GenerateTableOptions = {
+  tinyint1AsBoolean?: boolean
+}
 
-  const info = ast
+type GenerateDatabaseOptions = {
+  format?: boolean
+}
+
+type CreateField = {
+  column?: {
+    column?: string
+  }
+  nullable?: {
+    type?: string
+  }
+  auto_increment?: boolean
+  definition: {
+    dataType: string
+    expr?: {
+      type: string
+      value?: { value: string }[]
+    }
+    unsigned?: boolean
+    length?: number | { value?: number }
+  }
+}
+
+export const generateTable = (
+  sql: string,
+  options: GenerateTableOptions = {},
+): TableAndTypes | undefined => {
+  const parser = new Parser()
+  const ast = parser.astify(sql) as AST | AST[]
+  const info = Array.isArray(ast) ? (ast[0] as Create | AST) : ast
+
   if (!isCreateStatement(info)) {
     console.error("Passed in an invalid CREATE statement", ast)
     throw new Error("Passed in an invalid CREATE statement")
@@ -26,7 +56,7 @@ export const generateTable = (sql: string): TableAndTypes | undefined => {
     table: originalTableName,
     tableTypeName: camelCaseTable,
     types: `interface ${camelCaseTable}Table {
-              ${generateFields(info.create_definitions.flat())}
+              ${generateFields(info.create_definitions.flat(), options)}
           }
           export type ${camelCaseTable} = Selectable<${camelCaseTable}Table>
           export type New${camelCaseTable} = Insertable<${camelCaseTable}Table>
@@ -34,17 +64,31 @@ export const generateTable = (sql: string): TableAndTypes | undefined => {
   }
 }
 
-const generateFields = (fields: any[]): string => {
+const generateFields = (
+  fields: CreateField[],
+  options: GenerateTableOptions,
+): string => {
   const f = fields
     .filter((field) => field.column)
     .map((field) => {
       const canBeNull = field.nullable?.type !== "not null"
+      const lengthValue =
+        typeof field.definition?.length === "number"
+          ? field.definition.length
+          : field.definition?.length?.value
+      const tinyintAsBoolean =
+        options.tinyint1AsBoolean &&
+        field.definition?.dataType === "TINYINT" &&
+        lengthValue === 1
       const dataTypes = [
-        columnTypeToType(
-          "mysql",
-          field.definition.dataType,
-          field.definition.expr,
-        ),
+        tinyintAsBoolean
+          ? "boolean"
+          : columnTypeToType(
+              "mysql",
+              field.definition.dataType,
+              field.definition.expr,
+              { unsigned: Boolean(field.definition.unsigned) },
+            ),
       ]
 
       if (canBeNull) {
@@ -64,6 +108,7 @@ const generateFields = (fields: any[]): string => {
 
 export const generateDatabase = async (
   tableAndTypes: TableAndTypes[],
+  options: GenerateDatabaseOptions = {},
 ): Promise<string> => {
   const typesString = tableAndTypes.map(({ types }) => `${types}\n`).join("\n")
   const databaseString = [`\nexport interface DB {`]
@@ -77,6 +122,9 @@ export const generateDatabase = async (
   const str = `import { Generated, Insertable, Selectable, Updateable } from 'kysely'\n\n${typesString}\n${databaseString.join(
     "\n",
   )}`
+  if (options.format === false) {
+    return str
+  }
   const formattedStr = await format(str, { semi: false, parser: "typescript" })
   return formattedStr
 }

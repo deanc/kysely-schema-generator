@@ -31,4 +31,10 @@ describe("columnTypeToType", () => {
       }),
     ).toBe(`'a' | 'b' | 'c'`)
   })
+
+  it("BIGINT UNSIGNED maps to string", () => {
+    expect(
+      columnTypeToType("mysql", "BIGINT", undefined, { unsigned: true }),
+    ).toBe("string")
+  })
 })

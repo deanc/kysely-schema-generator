@@ -16,6 +16,9 @@ export const columnTypeToType = (
     type: string
     value?: { value: string }[]
   },
+  options?: {
+    unsigned?: boolean
+  },
 ): string => {
   if (!(columnType in typeMap[dbEngine])) {
     console.error(expression)
@@ -27,6 +30,10 @@ export const columnTypeToType = (
     expression.value
   ) {
     return expression.value.map((val) => `'${val.value}'`).join(" | ")
+  }
+
+  if (options?.unsigned && columnType === "BIGINT") {
+    return "string"
   }
 
   return typeMap[dbEngine][columnType]
