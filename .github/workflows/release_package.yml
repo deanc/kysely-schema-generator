@@ -5,6 +5,9 @@ on:
       release-type:
         description: 'Release type (one of): patch, minor, major, prepatch, preminor, premajor, prerelease'
         required: true
+permissions:
+  id-token: write
+  contents: write
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -24,6 +27,9 @@ jobs:
         uses: pnpm/action-setup@v4
         with:
           version: '10'
+
+      - name: Ensure npm supports trusted publishing
+        run: npm install -g npm@^11.5.1
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -73,8 +79,6 @@ jobs:
       # Publish version to public repository
       - name: Publish
         run: pnpm publish --access public --tag ${{ env.RELEASE_TAG }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPMJS_ACCESS_TOKEN }}
 
       # Push repository changes
       - name: Push changes to repository
