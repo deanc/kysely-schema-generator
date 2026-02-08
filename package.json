@@ -4,7 +4,7 @@
     "name": "Dean Clatworthy",
     "url": "https://deanclatworthy.com"
   },
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "A schema generator for kysely",
   "main": "./dist/index.js",
   "scripts": {
