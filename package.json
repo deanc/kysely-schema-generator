@@ -34,7 +34,7 @@
     "lodash": "^4.17.21",
     "mysql2": "^3.6.2",
     "node-sql-parser": "^4.11.0",
-    "pnpm": "^8.9.2",
+    "pnpm": "^10.29.1",
     "prettier": "^3.0.3"
   },
   "devDependencies": {
